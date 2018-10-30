@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS example_table (col1 integer PRIMARY KEY, col2 integer);

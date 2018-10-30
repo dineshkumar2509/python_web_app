@@ -1,0 +1,27 @@
+version: '0.1'
+services:
+  db:
+    image: postgres:10.4
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: my_app_pass
+    volumes:
+      - ./src/schema.sql:/docker-entrypoint-initdb.d/init.sql
+  my_app:
+    build: ./src/
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src/uwsgi.ini:/app/uwsgi.ini
+    links:
+      - db
+  nginx_web:
+    image: nginx:alpine
+    ports:
+      - "4567:4567"
+    links:
+      - my_app
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
